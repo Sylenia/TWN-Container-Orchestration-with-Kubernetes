@@ -213,6 +213,33 @@ Use the Minikube IP and the NodePort to access the Mongo Express interface in yo
 minikube service mongo-express -n demo-apps
 ```
 
+### 7. Namespaces
+
+Namespaces are a critical organizational tool in Kubernetes, allowing you to isolate and manage resources effectively. They are particularly useful for:
+
+- **Environment Isolation:** Separate development, testing, and production environments within the same cluster.
+- **Resource Management:** Apply resource quotas and access control at the namespace level.
+- **Multi-Team Collaboration:** Enable multiple teams to work on the same cluster without interference.
+
+To add a namespace, use:
+```bash
+kubectl create namespace <namespace-name>
+```
+
+#### Automate Namespace Selection
+
+To ensure all operations occur within a specific namespace, set the namespace context permanently using:
+```bash
+kubectl config set-context --current --namespace=<namespace-name>
+```
+
+Alternatively, you can use the `kubens` tool for quick namespace switching:
+```bash
+kubens <namespace-name>
+```
+
+> **Best Practice:** Always use namespaces for better organization and security, especially in multi-tenant or multi-environment setups.
+
 ---
 
 ## Best Practices
