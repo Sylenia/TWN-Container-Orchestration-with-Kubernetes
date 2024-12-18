@@ -240,6 +240,93 @@ kubens <namespace-name>
 
 > **Best Practice:** Always use namespaces for better organization and security, especially in multi-tenant or multi-environment setups.
 
+### 8. Services
+
+Kubernetes Services are used to expose applications running on a set of Pods. They provide networking capabilities to Pods and enable access both within and outside the cluster. Here are the main types of Services, their use cases, and example configurations:
+
+#### a. ClusterIP Service
+
+- **Use Case:** Default service type. Exposes the service on a cluster-internal IP, making it accessible only within the cluster.
+- **Example Configuration:**
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: example-clusterip
+      namespace: demo-apps
+    spec:
+      selector:
+        app: example-app
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+      type: ClusterIP
+    ```
+
+#### b. Headless Service
+
+- **Use Case:** Used for Stateful applications or when you need direct access to individual Pods.
+- **Example Configuration:**
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: example-headless
+      namespace: demo-apps
+    spec:
+      clusterIP: None
+      selector:
+        app: example-app
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+    ```
+
+#### c. NodePort Service
+
+- **Use Case:** Exposes the service on each Node's IP at a static port. Used for local testing or when external access is needed.
+- **Example Configuration:**
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: example-nodeport
+      namespace: demo-apps
+    spec:
+      selector:
+        app: example-app
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+        nodePort: 30007
+      type: NodePort
+    ```
+
+#### d. LoadBalancer Service
+
+- **Use Case:** Exposes the service externally using a cloud provider's load balancer. Ideal for production.
+- **Example Configuration:**
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: example-loadbalancer
+      namespace: demo-apps
+    spec:
+      selector:
+        app: example-app
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+      type: LoadBalancer
+    ```
+
+> **Best Practice:** Use `ClusterIP` for internal services, `NodePort` or `LoadBalancer` for external access, and `Headless` for StatefulSets or direct Pod communication.
+
 ---
 
 ## Best Practices
