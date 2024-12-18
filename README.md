@@ -327,6 +327,69 @@ Kubernetes Services are used to expose applications running on a set of Pods. Th
 
 > **Best Practice:** Use `ClusterIP` for internal services, `NodePort` or `LoadBalancer` for external access, and `Headless` for StatefulSets or direct Pod communication.
 
+### 9. Ingress
+
+Ingress in Kubernetes provides HTTP and HTTPS routing to services within the cluster. It acts as an entry point that routes external traffic to specific services based on defined rules.
+
+#### Use Cases
+- **Domain-Based Routing:** Direct traffic to different services using hostnames.
+- **Path-Based Routing:** Route requests to different services based on URL paths.
+- **SSL Termination:** Terminate SSL at the ingress level to offload certificates.
+- **Centralized Entry Point:** Manage multiple services behind a single load balancer.
+
+#### Example Configuration
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: kubernetes-dashboard
+spec:
+  rules:
+  - host: dashboard.com
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: kubernetes-dashboard
+              port:
+                number: 80
+```
+
+#### Controllers
+To use Ingress, an ingress controller must be installed. Common options include:
+- [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/)
+- [Traefik](https://doc.traefik.io/traefik/providers/kubernetes-ingress/)
+- [HAProxy](https://haproxy-ingress.github.io/)
+
+> **Best Practice:** Choose an ingress controller based on your environment and traffic requirements. Always use SSL for secure connections.
+
+#### Enabling Ingress in Minikube
+
+To enable Ingress in your Minikube environment, use the following command:
+```bash
+minikube addons enable ingress
+```
+
+Verify that the Ingress addon is enabled:
+```bash
+kubectl get pods -n kube-system
+```
+You should see pods related to the ingress controller running in the `kube-system` namespace.
+
+#### Enabling the Minikube Dashboard
+
+Minikube provides a built-in Kubernetes Dashboard for monitoring resources. To enable and access it, use the following command:
+```bash
+minikube dashboard
+```
+This command will open the dashboard in your default web browser.
+
+> **Tip:** Use the dashboard to visualize the status of your deployments, services, and ingress rules for easier debugging and management.
+
 ---
 
 ## Best Practices
